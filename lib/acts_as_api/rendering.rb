@@ -29,39 +29,39 @@ module ActsAsApi
       output_params = render_options
 
 
-      api_root_name = nil
+      # api_root_name = nil
+      # 
+      # if !output_params[:root].nil?
+      # 
+      #   api_root_name = output_params[:root].to_s
+      # 
+      # elsif api_model.respond_to?(:model_name)
+      #   api_root_name = api_model.model_name
+      # elsif api_model.is_a?(Array) && !api_model.empty? && api_model.first.class.respond_to?(:model_name)
+      #   api_root_name = api_model.first.class.model_name
+      # elsif api_model.class.respond_to?(:model_name)
+      #   api_root_name = api_model.class.model_name
+      # else
+      #   api_root_name = ActsAsApi::DEFAULT_ROOT.to_s
+      # end
+      # 
+      # api_root_name = api_root_name.underscore.tr('/', '_')
+      # 
+      # if api_model.is_a?(Array)
+      #   api_root_name = api_root_name.pluralize
+      # end
+      # 
+      # api_root_name = api_root_name.dasherize if ActsAsApi::DASHERIZE_FOR.include? api_format.to_sym
 
-      if !output_params[:root].nil?
-
-        api_root_name = output_params[:root].to_s
-
-      elsif api_model.respond_to?(:model_name)
-        api_root_name = api_model.model_name
-      elsif api_model.is_a?(Array) && !api_model.empty? && api_model.first.class.respond_to?(:model_name)
-        api_root_name = api_model.first.class.model_name
-      elsif api_model.class.respond_to?(:model_name)
-        api_root_name = api_model.class.model_name
-      else
-        api_root_name = ActsAsApi::DEFAULT_ROOT.to_s
-      end
-
-      api_root_name = api_root_name.underscore.tr('/', '_')
-
-      if api_model.is_a?(Array)
-        api_root_name = api_root_name.pluralize
-      end
-
-      api_root_name = api_root_name.dasherize if ActsAsApi::DASHERIZE_FOR.include? api_format.to_sym
-
-      output_params[:root] = api_root_name
+      #output_params[:root] = api_root_name
 
       #output_params[:root] = output_params[:root].camelize if render_options.has_key?(:camelize) && render_options[:camelize]
       #output_params[:root] = output_params[:root].dasherize if !render_options.has_key?(:dasherize) || render_options[:dasherize]
 
       api_response = api_model.as_api_response(api_template)
 
-      if meta_hash or ActsAsApi::ADD_ROOT_NODE_FOR.include? api_format
-        api_response = { api_root_name.to_sym =>  api_response}
+      if meta_hash
+        api_response = { :records =>  api_response}
       end
 
       api_response = meta_hash.merge api_response if meta_hash
